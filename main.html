@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funny Captcha</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+            .captcha-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: #eee;
+                border-radius: 5px;
+                padding: 20px;
+            }
+
+            .video-container {
+                display: none;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+                border-radius: 5px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                border: 1px solid #ddd;
+                margin: 20px;
+                width: 80%;
+                max-width: 800px;
+                z-index: 1000;
+            }
+
+            .video-container video {
+                width: 100%;
+                border-radius: 5px;
+            }
+
+            #captchaForm {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #fff;
+                border-radius: 90px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                border: 1px solid #ddd;
+                margin: 20px;
+                transition: all 0.2s ease-in-out;
+                width: 50%;
+            }
+
+            #captchaForm:hover {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+                border-color: #ccc;
+            }
+
+            label {
+                font-size: 16px;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+            }
+
+            .material-icons {
+                color: #3f51b5;
+                margin-right: 10px;
+                font-size: 50px;
+            }
+
+            #captcha-answer {
+                border: 1px solid #ccc;
+                padding: 15px 20px;
+                border-radius: 20px;
+                font-size: 16px;
+                width: 90%;
+                margin-bottom: 10px;
+            }
+
+            #captcha-answer:focus {
+                border-color: #ffc107;
+                outline: none;
+            }
+
+            button[type="submit"] {
+                background-color: #fff;
+                color: #3f51b5;
+                border: 1px solid #ddd;
+                padding: 10px 20px;
+                border-radius: 3px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: all 0.2s ease-in-out;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            }
+
+            button[type="submit"]:hover {
+                box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+                transform: translateY(-1px);
+            }
+
+            button[type="submit"]:active {
+                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+                transform: translateY(1px);
+            }
+
+            #captcha-question {
+                font-size: 50px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: #5e5e5f;
+            }
+
+            .captcha-container h2 {
+                font-size: 25px;
+                margin-bottom: 10px;
+                color: #ff1707;
+                text-align: center;
+            }
+            .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            z-index: 1000;
+            display: none;
+            }
+
+            .firework {
+                position: absolute;
+                width: 5px;
+                height: 5px;
+                background: red;
+                border-radius: 50%;
+                opacity: 0;
+                animation: explode 1s linear forwards;
+            }
+
+            @keyframes explode {
+                0% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(5);
+                }
+            }
+
+            .firework1 {
+                top: 50%;
+                left: 10%;
+            }
+
+            .firework2 {
+                top: 50%;
+                right: 10%;
+            }
+
+            .firework3 {
+                top: 20%;
+                left: 50%;
+            }
+
+            .firework4 {
+                top: 80%;
+                left: 50%;
+            }
+
+            .firework5 {
+                top: 50%;
+            left: 50%;
+            }
+            .papers-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none; 
+                z-index: 1000; 
+                display: none; 
+            }
+
+            .paper {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                background: #ffc107;
+                border-radius: 50%;
+                opacity: 0;
+                animation: fly 2s linear forwards;
+            }
+
+            @keyframes fly {
+                0% {
+                    opacity: 1;
+                    transform: translateX(0) translateY(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: translateX(calc(100vw / 2)) translateY(50vh) rotate(360deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateX(calc(100vw / 2)) translateY(100vh) rotate(720deg);
+                }
+            }
+
+            .paper1 {
+                top: 10%;
+                left: -10%;
+                animation-delay: 0s;
+            }
+
+            .paper2 {
+                top: 30%;
+                left: -10%;
+                animation-delay: 0.2s;
+            }
+
+            .paper3 {
+                top: 50%;
+                left: -10%;
+                animation-delay: 0.4s;
+            }
+
+            .paper4 {
+                top: 20%;
+                right: -10%;
+                animation-delay: 0.6s;
+            }
+
+            .paper5 {
+                top: 40%;
+                right: -10%;
+                animation-delay: 0.8s;
+            }
+
+    </style>
+</head>
+<body>
+    <div class="fireworks-container" id="fireworksContainer">
+        <div class="firework firework1"></div>
+        <div class="firework firework2"></div>
+        <div class="firework firework3"></div>
+        <div class="firework firework4"></div>
+        <div class="firework firework5"></div>
+    </div>
+    <div class="papers-container" id="papersContainer">
+        <div class="paper paper1"></div>
+        <div class="paper paper2"></div>
+        <div class="paper paper3"></div>
+        <div class="paper paper4"></div>
+        <div class="paper paper5"></div>
+    </div>
+
+    <audio id="successAudio" src="videos/02.mp3"></audio>
+    <div class="captcha-container">
+        <div class="video-container" id="videoContainer">
+            <video id="errorVideo" src="videos/01.mp4" ></video>
+        </div>
+
+        <form id="captchaForm">
+            <h2>Solve This CAPTCHA..</h2>
+            <label for="captcha">
+                <span id="captcha-question"></span>
+            </label>
+            <input type="number" id="captcha-answer" required placeholder="Enter answer">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function getRandomNumber() {
+                return Math.floor(Math.random() * 9) + 1;
+            }
+
+            function generateCaptcha() {
+                const num1 = getRandomNumber();
+                const num2 = getRandomNumber();
+                document.getElementById('captcha-question').textContent = `${num1} + ${num2}`;
+                return num1 + num2;
+            }
+
+            let correctAnswer = generateCaptcha();
+
+            document.getElementById('captchaForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const userAnswer = parseInt(document.getElementById('captcha-answer').value, 10);
+
+                if (userAnswer === correctAnswer) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Correct!',
+                        text: 'You have passed the Captcha.'
+                    });
+                    const successAudio = new Audio('videos/02.mp3');
+                    successAudio.play();
+                    const fireworksContainer = document.getElementById('fireworksContainer');
+                    fireworksContainer.style.display = 'block';
+                    const papersContainer = document.getElementById('papersContainer');
+            papersContainer.style.display = 'block';
+
+            setTimeout(() => {
+                papersContainer.style.display = 'none';
+            }, 2000); 
+                    setTimeout(() => {
+                        fireworksContainer.style.display = 'none';
+                    }, 1000); 
+                } else {
+  
+
+                    const videoContainer = document.getElementById('videoContainer');
+                    const captchaForm = document.getElementById('captchaForm');
+                    const errorVideo = document.getElementById('errorVideo');
+
+                    videoContainer.style.display = 'flex';
+                    captchaForm.style.display = 'none';
+
+                    errorVideo.play();
+
+                    errorVideo.onended = function() {
+                        videoContainer.style.display = 'none';
+                        captchaForm.style.display = 'flex';
+                    };
+
+                    correctAnswer = generateCaptcha();
+                    document.getElementById('captcha-answer').value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
